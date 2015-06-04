@@ -3,6 +3,7 @@ import os
 import socket
 import platform
 import sys
+
 x=0
 print ""
 var_network = raw_input("Segmento de RED: ")
@@ -15,7 +16,7 @@ with open(os.devnull, "wb") as limbo:
         for n in xrange(var_ipinit, var_ipend):
             try:
                 ip= var_network+`n`
-                result=subprocess.Popen(["ping", "-n", "1", "-w", "1", ip],
+                result=subprocess.Popen(["ping", "-c", "1", "-t", "1", ip],
                         stdout=limbo, stderr=limbo).wait()
                 if result:
                         print ip, "Inactive"
