@@ -19,12 +19,7 @@ class IP_Calc(object):
 
     def bin_to_ip(self,bin_str):
         ip = ""
-        ipt = ""
-        for key in range(0,32):
-            if key == 8 or key == 16 or key == 24:
-                ipt += "."
-            ipt +=bin_str[key]
-        num = ipt.split(".")
+        num = [bin_str[0:8],bin_str[8:16],bin_str[16:24],bin_str[24:32]]
         for i in num:
             bandera = 128
             octeto = 0
