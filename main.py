@@ -4,6 +4,7 @@ import socket
 import platform
 import sys
 
+
 x=0
 print ""
 var_network = raw_input("Segmento de RED: ")
