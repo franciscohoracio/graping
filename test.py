@@ -4,13 +4,25 @@ class Return_ips(object):
 
     def __init__(self,cadena):
         self.cadena = cadena
+        self.network_parts = self.cadena.split("/")
+        self.ip_str = self.network_parts[0]
+        self.ip_bin = self.ip_to_bin(self.ip_str)
+        self.netmask_cdr = self.network_parts[1]
+        self.netmask_bin = self.create_netmask_in_bin(self.netmask_cdr)
+        self.network = self.dir_network()
+        self.network_bin = self.ip_to_bin(self.network)
 
     def ip_to_bin(self,ip):
-        return '.'.join([bin(int(x)+256)[3:] for x in ip.split('.')])
+        return ''.join([bin(int(x)+256)[3:] for x in ip.split('.')])
 
     def bin_to_ip(self,bin_str):
         ip = ""
-        num = bin_str.split(".")
+        ipt = ""
+        for key in range(0,32):
+            if key == 8 or key == 16 or key == 24:
+                ipt += "."
+            ipt +=bin_str[key]
+        num = ipt.split(".")
         for i in num:
             bandera = 128
             octeto = 0
@@ -38,8 +50,6 @@ class Return_ips(object):
     def create_netmask_in_bin(self,bit_netmask_str):
         netmask_str = ""
         for key in range(0,32):
-            if key == 8 or key == 16 or key == 24:
-                netmask_str += "."
             if key > int(bit_netmask_str)-1:
                 netmask_str += "0"
             else:
@@ -47,49 +57,75 @@ class Return_ips(object):
         return netmask_str
 
     def dir_network(self):
-        resultado = ["","","",""]
-        network_parts = self.cadena.split("/")
-        octets_str = network_parts[0].split(".")
-        octets_bin = self.ip_to_bin(network_parts[0]).split(".")
-        netmask_bin = self.create_netmask_in_bin(network_parts[1]).split(".")
-        netmask_srt = self.bin_to_ip(netmask_bin[0] + "." +netmask_bin[1] + "."+netmask_bin[2] + "."+netmask_bin[3])
-        for i in range(0,4):
-            for j in range(0,8):
-                if netmask_bin[i][j] == "1" and octets_bin [i][j] == "1":
-                    resultado[i] += "1"
-                else:
-                    resultado[i] += "0"
-        return self.bin_to_ip(resultado[0] + "." +resultado[1] + "."+resultado[2] + "."+resultado[3])
+        res = ""
+        netmask_bin = self.create_netmask_in_bin(self.network_parts[1])
+        for key in range(0,32):
+            if self.netmask_bin[key] == self.ip_bin[key]:
+                res += self.ip_bin[key]
+            else:
+                res += "0"
+        return self.bin_to_ip(res)
 
     def ip_minima(self):
-        network_parts = self.cadena.split("/")
-        direccion_red_string = self.dir_network().split(".")
-        direccion_red_int =[]
-        for key in direccion_red_string:
-            direccion_red_int.append(int(key))
+        ip_int = []
+        ip_str = ""
+        ipt = ""
+        for key in range(0,32):
+            if key == 8 or key == 16 or key == 24:
+                ipt += "."
+            ipt +=self.network_bin[key]
+        num = ipt.split(".")
+        for i in num:
+            bandera = 128
+            octeto = 0
+            for j in range(0,len(i)):
+                if i[j] == "1":
+                    octeto +=bandera
+                bandera = bandera/2
+            ip_int.append(octeto)
+            ip_str = ""
+        return str(ip_int[0]) + "." + str(ip_int[1]) + "." + str(ip_int[2]) + "." + str(ip_int[3]+1)
 
-        direccion_red_int[3] += direccion_red_int[3] + 1
-        print direccion_red_int
+    def ip_maxima(self):
+        ip_maxima_bin = ""
+        ip_int = []
+        ipt = ""
+        for key in range(0,32):
+            if key < int(self.netmask_cdr)-1:
+                ip_maxima_bin += self.network_bin[key]
+            else:
+                ip_maxima_bin += "1"
+        for key in range(0,32):
+            if key == 8 or key == 16 or key == 24:
+                ipt += "."
+            ipt +=ip_maxima_bin[key]
+        num = ipt.split(".")
+        for i in num:
+            bandera = 128
+            octeto = 0
+            for j in range(0,len(i)):
+                if i[j] == "1":
+                    octeto +=bandera
+                bandera = bandera/2
+            ip_int.append(octeto)
+            ip_str = ""
+        return str(ip_int[0]) + "." + str(ip_int[1]) + "." + str(ip_int[2]) + "." + str(ip_int[3]-1)
 
-#    def ip_maxima(self):
-#        network_parts = self.cadena.split("/")
-#        direccion_red_string = self.dir_network().split(".")
-#        netmask_bin = self.create_netmask_in_bin(network_parts[1]).split(".")
-#        direccion_red_bin = self.ip_to_bin(network_parts[0]).split(".")
-#        for i in range(0,4):
-#            for j in range(0,8):
-#if netmask_bin[i][j] == "1" and direccion_red_bin [i][j] == "1":
-#                    pass
-#                else:
-#                    direccion_red_bin[i][j] = "1"
-#       return direccion_red_bin
+    def broadcast(self):
+        ip_maxima_bin = ""
+        for key in range(0,32):
+            if key < int(self.netmask_cdr)-1:
+                ip_maxima_bin += self.network_bin[key]
+            else:
+                ip_maxima_bin += "1"
+        return self.bin_to_ip(ip_maxima_bin)
 
     def ips(self):
-        network_parts = self.cadena.split("/")
-
-        return res
+        pass
 
 
-print Return_ips("192.168.195.1/22").ip_minima()
-print Return_ips("192.168.195.1/22").dir_network()
-#print Return_ips("192.168.195.1/22").
+
+print "Red: " , Return_ips("192.168.1.1/20").dir_network()
+print "Ip Minima: " , Return_ips("192.168.1.1/20").ip_minima()
+print "Ip Maxima: " , Return_ips("192.168.1.1/20").ip_maxima()
+print "Broadcast: " , Return_ips("192.168.1.1/20").broadcast()
