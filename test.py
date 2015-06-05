@@ -26,13 +26,7 @@ class IP_Calc(object):
         ip = []
         num = [bin_str[0:8],bin_str[8:16],bin_str[16:24],bin_str[24:32]]
         for i in num:
-            bandera = 128
-            octeto = 0
-            for j in range(0,len(i)):
-                if i[j] == "1":
-                    octeto +=bandera
-                bandera = bandera/2
-            ip.append(octeto)
+            ip.append(int(self.bin_to_octet(i)))
         return ip
 
 
