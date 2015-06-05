@@ -104,11 +104,14 @@ class IP_Calc(object):
         return self.bin_to_ip(ip_maxima_bin)
 
     def result(self):
-        for key in range(self.int_host_min,self.int_host_max+1):
-            self.res.append(self.bin_to_ip(str(bin(key))[2:]))
-        return self.res
+        if self.cantidad_host > 1000:
+            return ["Muchos para mostrarlos"]
+        else:
+            for key in range(self.int_host_min,self.int_host_max+1):
+                self.res.append(self.bin_to_ip(str(bin(key))[2:]))
+            return self.res
 
-ips = IP_Calc("192.168.1.0/25")
+ips = IP_Calc("192.168.1.0/8")
 print "IP", ips.ip_str
 print "Netmask", ips.netmask_str
 print "Network", ips.network_str
