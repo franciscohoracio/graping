@@ -19,6 +19,11 @@ class IP_Calc(object):
 
     def bin_to_ip(self,bin_str):
         ip = ""
+        ip_int = self.bin_to_ip_int(bin_str)
+        return str(ip_int[0])+"."+str(ip_int[1])+"."+str(ip_int[2])+"."+str(ip_int[3])
+
+    def bin_to_ip_int(self,bin_str):
+        ip = []
         num = [bin_str[0:8],bin_str[8:16],bin_str[16:24],bin_str[24:32]]
         for i in num:
             bandera = 128
@@ -27,8 +32,9 @@ class IP_Calc(object):
                 if i[j] == "1":
                     octeto +=bandera
                 bandera = bandera/2
-            ip += "." + str(octeto)
-        return ip[1:]
+            ip.append(octeto)
+        return ip
+
 
     def octet_to_bin(self, octet):
         return '.'.join([bin(int(octet)+256)[3:]])
@@ -64,15 +70,7 @@ class IP_Calc(object):
 
     def ip_minima(self):
         ip_int = []
-        num = [self.network_bin[0:8],self.network_bin[8:16],self.network_bin[16:24],self.network_bin[24:32]]
-        for i in num:
-            bandera = 128
-            octeto = 0
-            for j in range(0,len(i)):
-                if i[j] == "1":
-                    octeto +=bandera
-                bandera = bandera/2
-            ip_int.append(octeto)
+        ip_int = self.bin_to_ip_int(self.network_bin)
         return str(ip_int[0]) + "." + str(ip_int[1]) + "." + str(ip_int[2]) + "." + str(ip_int[3]+1)
 
     def ip_maxima(self):
@@ -83,15 +81,7 @@ class IP_Calc(object):
                 ip_maxima_bin += self.network_bin[key]
             else:
                 ip_maxima_bin += "1"
-        num = [ip_maxima_bin[0:8],ip_maxima_bin[8:16],ip_maxima_bin[16:24],ip_maxima_bin[24:32]]
-        for i in num:
-            bandera = 128
-            octeto = 0
-            for j in range(0,len(i)):
-                if i[j] == "1":
-                    octeto +=bandera
-                bandera = bandera/2
-            ip_int.append(octeto)
+        ip_int = self.bin_to_ip_int(ip_maxima_bin)
         return str(ip_int[0]) + "." + str(ip_int[1]) + "." + str(ip_int[2]) + "." + str(ip_int[3]-1)
 
     def broadcast(self):
