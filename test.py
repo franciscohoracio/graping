@@ -122,3 +122,16 @@ print "Cantidad de Host", ips.cantidad_host
 print "Ips"
 for key in ips.res:
     print key
+
+
+ips = IP_Calc("192.168.1.0/22")
+print "\n\nIP", ips.ip_str
+print "Netmask", ips.netmask_str
+print "Network", ips.network_str
+print "Ip Minima", ips.ip_min_str
+print "Ip Maxima", ips.ip_max_str
+print "Broadcast", ips.broadcast_str
+print "Cantidad de Host", ips.cantidad_host
+print "Ips"
+for key in ips.res:
+    print key
