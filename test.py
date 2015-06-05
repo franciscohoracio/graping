@@ -116,4 +116,6 @@ print "Ip Minima", ips.ip_min_str
 print "Ip Maxima", ips.ip_max_str
 print "Broadcast", ips.broadcast_str
 print "Cantidad de Host", ips.cantidad_host
-print "Ips", ips.res
+print "Ips"
+for key in ips.res:
+    print key
