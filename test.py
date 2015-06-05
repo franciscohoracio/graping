@@ -69,13 +69,7 @@ class IP_Calc(object):
 
     def ip_minima(self):
         ip_int = []
-        ip_str = ""
-        ipt = ""
-        for key in range(0,32):
-            if key == 8 or key == 16 or key == 24:
-                ipt += "."
-            ipt +=self.network_bin[key]
-        num = ipt.split(".")
+        num = [self.network_bin[0:8],self.network_bin[8:16],self.network_bin[16:24],self.network_bin[24:32]]
         for i in num:
             bandera = 128
             octeto = 0
@@ -84,23 +78,17 @@ class IP_Calc(object):
                     octeto +=bandera
                 bandera = bandera/2
             ip_int.append(octeto)
-            ip_str = ""
         return str(ip_int[0]) + "." + str(ip_int[1]) + "." + str(ip_int[2]) + "." + str(ip_int[3]+1)
 
     def ip_maxima(self):
         ip_maxima_bin = ""
         ip_int = []
-        ipt = ""
         for key in range(0,32):
             if key < int(self.netmask_cdr)-1:
                 ip_maxima_bin += self.network_bin[key]
             else:
                 ip_maxima_bin += "1"
-        for key in range(0,32):
-            if key == 8 or key == 16 or key == 24:
-                ipt += "."
-            ipt +=ip_maxima_bin[key]
-        num = ipt.split(".")
+        num = [ip_maxima_bin[0:8],ip_maxima_bin[8:16],ip_maxima_bin[16:24],ip_maxima_bin[24:32]]
         for i in num:
             bandera = 128
             octeto = 0
@@ -109,7 +97,6 @@ class IP_Calc(object):
                     octeto +=bandera
                 bandera = bandera/2
             ip_int.append(octeto)
-            ip_str = ""
         return str(ip_int[0]) + "." + str(ip_int[1]) + "." + str(ip_int[2]) + "." + str(ip_int[3]-1)
 
     def broadcast(self):
