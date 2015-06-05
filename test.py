@@ -1,6 +1,6 @@
 class IP_Calc(object):
     """Esta clase recibe un string con una cadena y resuelve IPs validas"""
-    res =[]
+    res = []
 
     def __init__(self,cadena):
         self.cadena = cadena
@@ -13,6 +13,12 @@ class IP_Calc(object):
         self.network_str = self.dir_network()
         self.network_bin = self.ip_to_bin(self.network_str)
         self.broadcast_str = self.broadcast()
+        self.ip_min_str = self.ip_minima()
+        self.ip_max_str = self.ip_maxima()
+        self.int_host_min = int(self.bin_to_int(self.ip_to_bin(self.ip_min_str)))
+        self.int_host_max = int(self.bin_to_int(self.ip_to_bin(self.ip_max_str)))
+        self.cantidad_host = self.int_host_max-self.int_host_min +1
+        self.res = self.result()
 
     def ip_to_bin(self,ip):
         return ''.join([bin(int(x)+256)[3:] for x in ip.split('.')])
@@ -29,6 +35,16 @@ class IP_Calc(object):
             ip.append(int(self.bin_to_octet(i)))
         return ip
 
+    def bin_to_int(self,bin_str):
+        ip = ""
+        bandera = 2147483648
+        octeto = 0
+        for i in range(0,len(bin_str)):
+            if bin_str[i] == "1":
+                octeto +=bandera
+            bandera = bandera/2
+        ip += "." + str(octeto)
+        return ip[1:]
 
     def octet_to_bin(self, octet):
         return '.'.join([bin(int(octet)+256)[3:]])
@@ -71,7 +87,7 @@ class IP_Calc(object):
         ip_maxima_bin = ""
         ip_int = []
         for key in range(0,32):
-            if key < int(self.netmask_cdr)-1:
+            if key < int(self.netmask_cdr):
                 ip_maxima_bin += self.network_bin[key]
             else:
                 ip_maxima_bin += "1"
@@ -81,21 +97,23 @@ class IP_Calc(object):
     def broadcast(self):
         ip_maxima_bin = ""
         for key in range(0,32):
-            if key < int(self.netmask_cdr)-1:
+            if key < int(self.netmask_cdr):
                 ip_maxima_bin += self.network_bin[key]
             else:
                 ip_maxima_bin += "1"
         return self.bin_to_ip(ip_maxima_bin)
 
-    def ips(self):
-        pass
+    def result(self):
+        for key in range(self.int_host_min,self.int_host_max+1):
+            self.res.append(self.bin_to_ip(str(bin(key))[2:]))
+        return self.res
 
-
-
-ips = IP_Calc("192.168.34.0/21")
+ips = IP_Calc("192.168.1.0/25")
 print "IP", ips.ip_str
 print "Netmask", ips.netmask_str
 print "Network", ips.network_str
-print "Ip Minima", ips.ip_minima()
-print "Ip Maxima", ips.ip_maxima()
+print "Ip Minima", ips.ip_min_str
+print "Ip Maxima", ips.ip_max_str
 print "Broadcast", ips.broadcast_str
+print "Cantidad de Host", ips.cantidad_host
+print "Ips", ips.res
