@@ -1,4 +1,4 @@
-class Return_ips(object):
+class IP_Calc(object):
     """Esta clase recibe un string con una cadena y resuelve IPs validas"""
     res =[]
 
@@ -8,9 +8,11 @@ class Return_ips(object):
         self.ip_str = self.network_parts[0]
         self.ip_bin = self.ip_to_bin(self.ip_str)
         self.netmask_cdr = self.network_parts[1]
-        self.netmask_bin = self.create_netmask_in_bin(self.netmask_cdr)
-        self.network = self.dir_network()
-        self.network_bin = self.ip_to_bin(self.network)
+        self.netmask_bin = self.create_netmask_in_bin()
+        self.netmask_str = self.bin_to_ip(self.netmask_bin)
+        self.network_str = self.dir_network()
+        self.network_bin = self.ip_to_bin(self.network_str)
+        self.broadcast_str = self.broadcast()
 
     def ip_to_bin(self,ip):
         return ''.join([bin(int(x)+256)[3:] for x in ip.split('.')])
@@ -47,10 +49,10 @@ class Return_ips(object):
         ip += "." + str(octeto)
         return ip[1:]
 
-    def create_netmask_in_bin(self,bit_netmask_str):
+    def create_netmask_in_bin(self):
         netmask_str = ""
         for key in range(0,32):
-            if key > int(bit_netmask_str)-1:
+            if key > int(self.netmask_cdr)-1:
                 netmask_str += "0"
             else:
                 netmask_str += "1"
@@ -58,7 +60,6 @@ class Return_ips(object):
 
     def dir_network(self):
         res = ""
-        netmask_bin = self.create_netmask_in_bin(self.network_parts[1])
         for key in range(0,32):
             if self.netmask_bin[key] == self.ip_bin[key]:
                 res += self.ip_bin[key]
@@ -125,7 +126,10 @@ class Return_ips(object):
 
 
 
-print "Red: " , Return_ips("192.168.1.1/20").dir_network()
-print "Ip Minima: " , Return_ips("192.168.1.1/20").ip_minima()
-print "Ip Maxima: " , Return_ips("192.168.1.1/20").ip_maxima()
-print "Broadcast: " , Return_ips("192.168.1.1/20").broadcast()
+ips = IP_Calc("192.168.34.0/21")
+print "IP", ips.ip_str
+print "Netmask", ips.netmask_str
+print "Network", ips.network_str
+print "Ip Minima", ips.ip_minima()
+print "Ip Maxima", ips.ip_maxima()
+print "Broadcast", ips.broadcast_str
