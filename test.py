@@ -3,17 +3,14 @@ class IP_Calc(object):
 
     def __init__(self,cadena):
         self.ip_str = cadena.split("/")[0]
-        self.ip_bin = self.__ip_to_bin(self.ip_str)
+        self.ip_bin = ''.join([bin(int(x)+256)[3:] for x in self.ip_str.split('.')])
         self.netmask_cidr = cadena.split("/")[1]
         self.netmask_str = ""
         self.broadcast_str = ""
         self.network_str = ""
         self.ip_min_str = ""
         self.quantity_host = 0
-        self.res = self.__calculo()
-
-    def __ip_to_bin(self,ip):
-        return ''.join([bin(int(x)+256)[3:] for x in ip.split('.')])
+        self.res = self.__calc()
 
     def __bin_to_ip(self,bin_str):
         return str(int(bin_str[0:8],base=2))+"."+str(int(bin_str[8:16],base=2))+"."+str(int(bin_str[16:24],base=2))+"."+str(int(bin_str[24:32],base=2))
@@ -21,7 +18,7 @@ class IP_Calc(object):
     def __bin_to_int(self,bin_str):
         return int(bin_str, base=2)
 
-    def __calculo(self):
+    def __calc(self):
         broadcast_bin = ""
         netmask_bin = ""
         network_bin = ""
@@ -48,7 +45,7 @@ class IP_Calc(object):
                 self.res.append(self.__bin_to_ip(str(bin(key))[2:]))
             return self.res
 
-ips = IP_Calc("192.168.1.0/29")
+ips = IP_Calc("192.168.1.0/24")
 print "\n\nIP", ips.ip_str
 print "Netmask", ips.netmask_str
 print "Network", ips.network_str
