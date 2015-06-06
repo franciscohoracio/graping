@@ -47,7 +47,7 @@ class IpCalc(object):
                 self.res.append(bin_to_ip(str(bin(key))[2:]))
             return self.res
 
-ips = IpCalc("192.168.1.34 255.255.255.0")
+ips = IpCalc("192.168.1.34 255.255.255.240")
 print "\n\nIP", ips.ip_str
 print "Netmask", ips.netmask_str
 print "Network", ips.network_str
@@ -57,7 +57,7 @@ print "Broadcast", ips.broadcast_str
 print "Cantidad de Host", ips.quantity_host
 
 
-ips = IpCalc("192.168.1.34/24")
+ips = IpCalc("192.168.1.34/22")
 print "\n\nIP", ips.ip_str
 print "Netmask", ips.netmask_str
 print "Network", ips.network_str
