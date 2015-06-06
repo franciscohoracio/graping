@@ -27,18 +27,18 @@ class IpCalc(object):
         for key in range(0,32):
             if key > int(self.netmask_cidr)-1:
                 netmask_bin += "0"
-                broadcast_bin+= "1"
-                network_bin+= "0"
+                broadcast_bin += "1"
+                network_bin += "0"
 
             else:
                 netmask_bin += "1"
                 network_bin += self.ip_bin[key]
-                broadcast_bin+= self.ip_bin[key]
+                broadcast_bin += self.ip_bin[key]
         self.netmask_str = bin_to_ip(netmask_bin)
         self.broadcast_str = bin_to_ip(broadcast_bin)
         self.network_str = bin_to_ip(network_bin)
-        self.ip_min_str =  bin_to_ip(str(bin(bin_to_int(network_bin)+1))[2:])
-        self.ip_max_str =  bin_to_ip(str(bin(bin_to_int(broadcast_bin)-1))[2:])
+        self.ip_min_str = bin_to_ip(str(bin(bin_to_int(network_bin)+1))[2:])
+        self.ip_max_str = bin_to_ip(str(bin(bin_to_int(broadcast_bin)-1))[2:])
         self.quantity_host = bin_to_int(broadcast_bin) - bin_to_int(network_bin)-1
         if self.quantity_host > 1000:
             return ["Many Hosts"]
