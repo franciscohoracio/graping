@@ -50,17 +50,9 @@ class IP_Calc(object):
     def bin_to_int(self,bin_str):
         """
         :param bin_str:  ip en formato "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-        :return:    XXXX
+        :return:    "XXXXX"
         """
-        ip = ""
-        bandera = 2147483648
-        octeto = 0
-        for i in range(0,len(bin_str)):
-            if bin_str[i] == "1":
-                octeto +=bandera
-            bandera = bandera/2
-        ip += "." + str(octeto)
-        return ip[1:]
+        return int(bin_str, base=2)
 
     def octet_to_bin(self, octet):
         """
@@ -74,15 +66,7 @@ class IP_Calc(object):
         :param bin_str: "XXXXXXXX
         :return: "XXX"
         """
-        ip = ""
-        bandera = 128
-        octeto = 0
-        for i in range(0,len(bin_str)):
-            if bin_str[i] == "1":
-                octeto +=bandera
-            bandera = bandera/2
-        ip += "." + str(octeto)
-        return ip[1:]
+        return int(bin_str, base=2)
 
     def create_netmask_in_bin(self):
         """
@@ -154,7 +138,7 @@ class IP_Calc(object):
             return self.res
 
 
-ips = IP_Calc("192.168.1.0/29")
+ips = IP_Calc("192.168.1.0/1")
 print "\n\nIP", ips.ip_str
 print "Netmask", ips.netmask_str
 print "Network", ips.network_str
